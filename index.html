@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Alpha version</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/input.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:700|Roboto:100,300,400,500,700" rel="stylesheet">
+    <style>
+      html, body {
+        margin: 0px;
+        height: 100%;
+        overflow-y: hidden;
+        min-width: 800px;
+      }
+      .main-wrapper{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .redactor-wrapper{
+        flex-grow: 2;
+        display: flex;
+        flex-direction: row wrap;
+        align-items: stretch;
+      }
+      .redactor-workspace{
+        flex-basis: 40%;
+        flex-grow: 2;
+        flex-shrink: 2;
+      }
+      .redactor-controls{
+        padding: 10px;
+        flex-basis: 300px;
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+      .header{
+        padding: 10px;
+        height: 30px;
+        background-color: #fff;
+        border-bottom: 2px solid #e1e4e8;
+      }
+      .header__logo-title{
+        cursor: pointer;
+        font-family: 'Quicksand', sans-serif;
+        color: #f9b618;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 30px;
+      }
+      .feature-block{
+        margin: 10px;
+      }
+      .feature-title{
+        padding: 5px;
+        border-bottom: 1px solid #c2cfc8;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        color: #333333;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      .feature-details{
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+      }
+      .property-block{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin: 5px;
+      }
+      .property-title{
+        flex-basis: 100px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+      }
+      .property{
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+      }
+      .button{
+        margin: 5px;
+      }
+      .active{
+        color: #34bc34;
+      }
+      .title{
+        cursor: pointer;
+      }
+      .disable{
+        display: none;
+      }
+      .floor_list{
+        margin: 5px;
+      }
+      .floor_element{
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+      }
+      .floor_title{
+        cursor: pointer;
+      }
+      .floor_element{
+        margin: 5px;
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-wrapper">
+      <div class="header" id="header">
+        <span class="header__logo-title">Almost House</span>
+      </div>
+      <div class="redactor-wrapper">
+        <div class="redactor-controls" id="redactor-controls">
+
+          <div class="feature-block">
+            <div class="feature-title">
+              <div class="title" id="current_title">
+                <span>Текущий элемент</span>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+                <i class="fa fa-caret-up disable" aria-hidden="true"></i>
+              </div>
+              <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </div>
+            <div class="feature-details style-1" id="current_detail" style="display: none">
+              <div class="property-block">
+                <span class="property-title">Длина</span>
+                <span class="property" id="current_width"></span>
+              </div>
+              <div class="property-block">
+                <span class="property-title">Высота</span>
+                <span class="property" id="current_height"></span>
+              </div>
+              <div class="property-block">
+                <span class="property-title">Ширина</span>
+                <span class="property" id="current_depth"></span>
+              </div>
+              <button class="button button-primary button-small" id="restore_element">Удалить проёмы</button>
+              <button class="button button-primary button-small" id="delete_element">Удалить</button>
+            </div>
+          </div>
+          <div class="feature-block">
+            <div class="feature-title">
+              <div class="title" id="floor_title">
+                <span>Этажи</span>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+                <i class="fa fa-caret-up disable" aria-hidden="true"></i>
+              </div>
+              <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </div>
+            <div class="feature-details style-1" id="floor_detail" style="display: none">
+              <div class="floor_list" id ="floor_list">
+
+              </div>
+              <div class="property-block">
+                <span class="property-title">Начальная высота</span>
+                <input type="text" id="floor_position">
+              </div>
+              <button class="button button-primary button-small" id="add_floor">Добавить этаж</button>
+              <button class="button button-primary button-small" id="scale_change">Спрятать стены</button>
+            </div>
+          </div>
+
+          <div class="feature-block">
+            <div class="feature-title">
+              <div class="title" id="camera_title">
+                <span>Камера</span>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+                <i class="fa fa-caret-up disable" aria-hidden="true"></i>
+              </div>
+              <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </div>
+            <div class="feature-details" id="camera_detail" style="display: none">
+              <button class="button button-primary button-small" id="camera_mode">Позиционирование камеры</button>
+            </div>
+          </div>
+
+          <div class="feature-block">
+            <div class="feature-title">
+              <div class="title" id="wall_title">
+                <span>Стена</span>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+                <i class="fa fa-caret-up disable" aria-hidden="true"></i>
+              </div>
+              <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </div>
+            <div class="feature-details style-1" id="wall_detail" style="display: none">
+              <div class="property-block">
+                <span class="property-title">Ширина</span>
+                <input type="text" id="wall-depth">
+              </div>
+              <div class="property-block">
+                <span class="property-title">Высота</span>
+                <input type="text" id="wall-height">
+              </div>
+              <div class="property-block">
+                <span class="property-title">Текстура</span>
+              </div>
+              <button class="button button-primary button-small" id="wall_mode">Постройка стены</button>
+            </div>
+          </div>
+
+          <div class="feature-block">
+            <div class="feature-title">
+              <div class="title" id="window_title">
+                <span>Проёмы</span>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+                <i class="fa fa-caret-up disable" aria-hidden="true"></i>
+              </div>
+              <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </div>
+            <div class="feature-details style-1" id="window_detail" style="display: none">
+              <div class="property-block">
+                <span class="property-title">Ширина</span>
+                <input type="text" id="window-width">
+              </div>
+              <div class="property-block">
+                <span class="property-title">Высота</span>
+                <input type="text" id="window-height">
+              </div>
+              <button class="button button-primary button-small" id="window_mode">Постройка проёма</button>
+            </div>
+          </div>
+
+          <div class="feature-block">
+            <div class="feature-title">
+              <div class="title" id="ground_title">
+                <span>Пол</span>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+                <i class="fa fa-caret-up disable" aria-hidden="true"></i>
+              </div>
+              <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </div>
+            <div class="feature-details style-1" id="ground_detail" style="display: none">
+              <div class="property-block">
+                <span class="property-title">Длина</span>
+                <input type="text" id="ground-width">
+              </div>
+              <div class="property-block">
+                <span class="property-title">Ширина</span>
+                <input type="text" id="ground-height">
+              </div>
+              <button class="button button-primary button-small" id="ground_mode">Постройка пола</button>
+            </div>
+          </div>
+
+          <div class="feature-block">
+            <button class="button button-primary button-small" id="save_scene">
+              Сохранение сцены
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+            </button>
+            <button class="button button-primary button-small" id="load_scene">
+              Загрузка сцены
+              <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div class="redactor-workspace" id="workspace"></div>
+      </div>
+    </div>
+
+    <script src="js/libs/three.min.js"></script>
+    <script src="js/libs/OBJExporter.js"></script>
+    <script src="js/libs/OBJLoader.js"></script>
+    <script src="js/libs/SceneExporter.js"></script>
+    <script src="js/libs/SceneLoader.js"></script>
+    <script src="js/libs/csg.js"></script>
+    <script src="js/libs/ThreeCSG.js"></script>
+    <script src="js/libs/OrbitControls.js"></script>
+    <script src="js/libs/jquery-3.2.1.js"></script>
+    <script src="CameraHandler.js"></script>
+    <script src="WallHandler.js"></script>
+    <script src="WindowHandler.js"></script>
+    <script src="GroundHandler.js"></script>
+    <script src="InterfaceSetup.js"></script>
+    <script src="ActionDispatcher.js"></script>
+    <script src="Initialize.js"></script>
+
+    <script>
+      var sceneLoad = null;
+      var mouse, raycaster, isShiftDown = false;
+      var objects = [];
+      var rollOverPrimitive, rollOverWall;
+      var rollOverCube, rollOveredWall = null;
+      var rollOverCamera;
+      var rollOverGround;
+      var targetMesh;
+      var headerHeight, controlBarWidth;
+      var sideGrid = [];
+      var redactorContainer;
+      var planes = [];
+      var camera, scene, renderer;
+      var selectedObject;
+      var breakPoints = [];
+      var walls = [];
+      var isShowing = true;
+      var sceneOBJ;
+      var currentFloor = 0;
+      init();
+      setupInterface();
+      animate();
+      render();
+    </script>
+  </body>
+</html>
