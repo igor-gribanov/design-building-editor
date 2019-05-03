@@ -1,2 +1,2 @@
 # design-building-editor
-Bachelor degree qualification work
+Bachelor degree qualification work (c) 2017
